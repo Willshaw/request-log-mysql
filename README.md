@@ -14,3 +14,7 @@ Pass in a Fusion Reactor request log file and a table name, to turn the log file
 ```
 
 Alternatively, just pass in the log file and a table name will be built from the date date of the first line, and the times from the first and last line, e.g. `<date>-<earliest_time>-<latest_time>`
+
+## Credits
+
+FR request headers taken from Charlie Areharts useful FR log headers Github repo: https://github.com/carehart/FusionReactor-Log-Headers
