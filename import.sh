@@ -57,6 +57,9 @@ tablename=$(printf '%s' "$tablename" | tr '[:upper:]' '[:lower:]')
 tablename=$(printf '%s' "$tablename" | tr -c '[:alnum:]' '_')
 echo " > conversion complete: $tablename"
 
+# Prefix table name with fr_request_log_
+tablename="fr_request_log_$tablename"
+
 # add the headers to the log file
 rm tmp.log || echo "tmp.log does not exist"
 cat ./headers.txt $logfile > tmp.log
