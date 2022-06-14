@@ -3,7 +3,9 @@ Convert a fusion reactor request log to a mysql table
 
 ## Prerequisites
 
-You linux user needs to have a `~/.my.cnf` file setup, and the user needs to be able to create tables
+You linux user needs to have a `~/.my.cnf` file setup, and the user needs to be able to create tables.
+
+You'll also need your mysql to allow `local-infile=1` in your mysql conf
 
 ## Usage
 

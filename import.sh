@@ -62,8 +62,13 @@ tablename="fr_request_log_$tablename"
 
 # add the headers to the log file
 rm tmp.log || echo "tmp.log does not exist"
-cat ./headers.txt $logfile > tmp.log
+cp ./headers.txt tmp.log
+cat  $logfile >> tmp.log
 
 # create the table
-cat 'create_table.template' | sed "s/TABLENAME/$tablename/g" > create_table.sql
+cat 'create_table.template' | sed "s@TABLENAME@$tablename@g" > create_table.sql
 mysql $database < create_table.sql
+
+# import the data
+sed -e "s@TABLENAME@$tablename@g" -e "s@LOGFILE@$logfile@g" import_table.template > import_table.sql
+mysql --local-infile $database < import_table.sql
