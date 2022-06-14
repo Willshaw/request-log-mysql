@@ -1,12 +1,23 @@
 #!/bin/bash
 
-logfile=$1
+# usage message
+usage='import.sh <database> <logfile> (<tablename>)'
 
-tablename=$2
+# database to insert into and logfile are required
+database=$1
+logfile=$2
 
+# optional table name to use when creating log table
+tablename=$3
+
+# check logfile and database are set
+if [ -z "$database" ]
+then
+      echo "Please specify database: $usage"
+fi
 if [ -z "$logfile" ]
 then
-      echo "Please specify a file"
+      echo "Please specify a file: $usage"
 fi
 
 if [ -z "$tablename" ]
@@ -26,12 +37,12 @@ then
     tablename="$date-$starttime-$endtime"
 
     while true; do
-        read -p "Table name not specified, using \"$tablename\" based on log file, is this ok? (y/n)" yn
-    
+        read -p "Table name not specified, using \"$tablename\" based on log file, is this ok? [Y/n] " yn
+        yn=${yn:-y}
         case $yn in
             [Yy]* ) echo "Using $tablename";
                 break;;
-            [Nn]* ) echo "Exiting, please start again with the format import.sh <logfile> <tablename>";
+            [Nn]* ) echo "Exiting, please start again with the format $usage";
                 exit;;
             * ) echo "Please answer y to accept, or n to exit and supply a table name.";;
         esac
@@ -50,3 +61,6 @@ echo " > conversion complete: $tablename"
 rm tmp.log || echo "tmp.log does not exist"
 cat ./headers.txt $logfile > tmp.log
 
+# create the table
+cat 'create_table.template' | sed "s/TABLENAME/$tablename/g" > create_table.sql
+mysql $database < create_table.sql
